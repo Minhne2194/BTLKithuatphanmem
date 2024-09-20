@@ -189,8 +189,7 @@ main {
         </div>
     </main>
 
-    <script>
-      let cart = [];
+    <script>let cart = [];
 const cartBtn = document.getElementById("cart-btn");
 const cartCount = document.getElementById("cart-count");
 const cartItems = document.getElementById("cart-items");
@@ -262,39 +261,6 @@ window.onload = function() {
         option.textContent = city;
         citySelect.appendChild(option);
     });
-    deliveryModal.style.display = "flex";
-};
-
-// Xác nhận khu vực giao hàng
-confirmDeliveryBtn.addEventListener("click", () => {
-    const selectedCity = citySelect.value;
-    if (selectedCity) {
-        alert(`Khu vực giao hàng đã chọn: ${selectedCity}`);
-        deliveryModal.style.display = "none";
-    } else {
-        alert("Vui lòng chọn khu vực giao hàng!");
-    }
-});
-
-// Modal Elements
-const deliveryModal = document.getElementById("delivery-modal");
-const citySelect = document.getElementById("city-select");
-const confirmDeliveryBtn = document.getElementById("confirm-delivery");
-
-// Danh sách các tỉnh thành (giả lập database)
-const cities = [
-    "Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ",
-    "Bình Dương", "Đồng Nai", "Khánh Hòa", "Lâm Đồng", "Quảng Ninh"
-];
-
-// Hiển thị danh sách các tỉnh thành trong modal
-window.onload = function() {
-    cities.forEach(city => {
-        const option = document.createElement("option");
-        option.value = city;
-        option.textContent = city;
-        citySelect.appendChild(option);
-    });
     deliveryModal.style.display = "flex";  // Hiển thị modal khi tải trang
 };
 
@@ -308,7 +274,6 @@ confirmDeliveryBtn.addEventListener("click", () => {
         alert("Vui lòng chọn khu vực giao hàng!");  // Hiển thị thông báo nếu chưa chọn
     }
 });
-
     </script>
 </body>
 </html>
