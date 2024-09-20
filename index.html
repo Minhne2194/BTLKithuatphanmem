@@ -55,6 +55,21 @@ main {
     margin: 0.5rem 0;
 }
 
+
+#category-select {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+#search-bar {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 200px;
+}
+      
+      
 .add-to-cart {
     background-color: #e74c3c;
     color: white;
@@ -155,11 +170,21 @@ main {
     </div>
     
     <header>
-        <h1>Siêu Thị Online</h1>
+        <div class="header-items">
+        <select id="category-select">
+            <option value="all">Tất cả sản phẩm</option>
+            <option value="fruits">Trái cây</option>
+            <option value="dairy">Sữa</option>
+            <!-- Add more categories as needed -->
+        </select>
+
+        <input type="text" id="search-bar" placeholder="Tìm kiếm sản phẩm...">
+
         <div class="cart">
             <button id="cart-btn">Giỏ Hàng (<span id="cart-count">0</span>)</button>
         </div>
     </header>
+    
 
     <main>
         <h2>Sản phẩm</h2>
