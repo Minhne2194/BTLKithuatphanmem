@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siêu Thị Online</title>
+    <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #3498db;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.cart {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+main {
+    padding: 20px;
+}
+
+.product-list {
+    display: flex;
+    gap: 20px;
+}
+
+.product {
+    background-color: white;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.product h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.product p {
+    margin: 0.5rem 0;
+}
+
+.add-to-cart {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-to-cart:hover {
+    background-color: #c0392b;
+}
+
+#cart {
+    margin-top: 20px;
+    background-color: white;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#cart-items {
+    list-style-type: none;
+    padding: 0;
+}
+
+#cart-items li {
+    margin-bottom: 10px;
+}
+
+#total-price {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#checkout-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#checkout-btn:hover {
+    background-color: #27ae60;
+}
+
+.hidden {
+    display: none;
+}
+  </style>
+</head>
+<body>
+    <header>
+        <h1>Siêu Thị Online</h1>
+        <div class="cart">
+            <button id="cart-btn">Giỏ Hàng (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <main>
+        <h2>Sản phẩm</h2>
+        <div class="product-list">
+            <div class="product">
+                <h3>Táo</h3>
+                <p>Giá: 30,000 VND</p>
+                <button class="add-to-cart" data-name="Táo" data-price="30000">Thêm vào giỏ</button>
+            </div>
+            <div class="product">
+                <h3>Chuối</h3>
+                <p>Giá: 20,000 VND</p>
+                <button class="add-to-cart" data-name="Chuối" data-price="20000">Thêm vào giỏ</button>
+            </div>
+            <div class="product">
+                <h3>Sữa</h3>
+                <p>Giá: 50,000 VND</p>
+                <button class="add-to-cart" data-name="Sữa" data-price="50000">Thêm vào giỏ</button>
+            </div>
+        </div>
+
+        <div id="cart" class="hidden">
+            <h2>Giỏ Hàng</h2>
+            <ul id="cart-items"></ul>
+            <p id="total-price">Tổng: 0 VND</p>
+            <button id="checkout-btn">Thanh Toán</button>
+        </div>
+    </main>
+
+    <script>
+      let cart = [];
+const cartBtn = document.getElementById("cart-btn");
+const cartCount = document.getElementById("cart-count");
+const cartItems = document.getElementById("cart-items");
+const totalPriceElement = document.getElementById("total-price");
+const cartElement = document.getElementById("cart");
+const checkoutBtn = document.getElementById("checkout-btn");
+
+document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', () => {
+        const productName = button.getAttribute('data-name');
+        const productPrice = parseInt(button.getAttribute('data-price'));
+
+        const product = cart.find(item => item.name === productName);
+        if (product) {
+            product.quantity++;
+        } else {
+            cart.push({ name: productName, price: productPrice, quantity: 1 });
+        }
+
+        updateCart();
+    });
+});
+
+cartBtn.addEventListener('click', () => {
+    cartElement.classList.toggle('hidden');
+});
+
+checkoutBtn.addEventListener('click', () => {
+    if (cart.length > 0) {
+        alert('Thanh toán thành công!');
+        cart = [];
+        updateCart();
+    } else {
+        alert('Giỏ hàng của bạn đang trống.');
+    }
+});
+
+function updateCart() {
+    cartItems.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - ${item.quantity} x ${item.price} VND`;
+        cartItems.appendChild(li);
+        total += item.price * item.quantity;
+    });
+
+    totalPriceElement.textContent = `Tổng: ${total.toLocaleString()} VND`;
+    cartCount.textContent = cart.length;
+}
+    </script>
+</body>
+</html>
