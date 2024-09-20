@@ -310,8 +310,7 @@ main {
         <button id="checkout-btn" class="btn btn-primary">Thanh Toán</button>
     </div>
 </main>
-
-    <script>
+        <script>
         let cart = [];
         const cartBtn = document.getElementById("cart-btn");
         const cartCount = document.getElementById("cart-count");
@@ -319,134 +318,143 @@ main {
         const totalPriceElement = document.getElementById("total-price");
         const cartElement = document.getElementById("cart");
         const checkoutBtn = document.getElementById("checkout-btn");
-
-
-        const products = [
-            { name: "Bưởi", category: "fruits_vegetables" },
-            { name: "Sữa đặc", category: "dairy" },
-            { name: "Thịt gà", category: "meat_eggs" },
-            { name: "Bánh quy", category: "snacks" },
-            { name: "Nước ngọt", category: "beverages" },
-            { name: "Muối", category: "spices_rice_dry_foods" },
-            { name: "Gạo trắng", category: "spices_rice_dry_foods" },
-            { name: "Nến thơm", category: "home_living" }
-            // Thêm các sản phẩm khác nếu cần
-        ];
-
         const categorySelect = document.getElementById('category-select');
         const searchBar = document.getElementById('search-bar');
         const productList = document.getElementById('product-list');
 
-// Hàm hiển thị sản phẩm
-function displayProducts(filteredProducts) {
-    productList.innerHTML = ''; // Xóa danh sách sản phẩm hiện tại
-    filteredProducts.forEach(product => {
-        const productItem = document.createElement('div');
-        productItem.textContent = product.name;
-        productList.appendChild(productItem);
-    });
-}
+        const products = [
+            { name: "Táo", category: "fruits_vegetables", price: 30000 },
+            { name: "Chuối", category: "fruits_vegetables", price: 20000 },
+            { name: "Sữa", category: "dairy", price: 50000 },
+            { name: "Bưởi", category: "fruits_vegetables", price: 40000 },
+            { name: "Cam", category: "fruits_vegetables", price: 25000 },
+            { name: "Thịt gà", category: "meat_eggs", price: 80000 },
+            { name: "Bánh quy", category: "snacks", price: 15000 },
+            { name: "Nước ngọt", category: "beverages", price: 10000 },
+            { name: "Muối", category: "spices_rice_dry_foods", price: 5000 },
+            { name: "Gạo trắng", category: "spices_rice_dry_foods", price: 25000 },
+            // Thêm các sản phẩm khác nếu cần
+        ];
 
-// Hàm lọc sản phẩm
-function filterProducts() {
-    const selectedCategory = categorySelect.value;
-    const searchTerm = searchBar.value.toLowerCase();
+        // Hàm hiển thị sản phẩm
+        function displayProducts(filteredProducts) {
+            productList.innerHTML = ''; // Xóa danh sách sản phẩm hiện tại
+            filteredProducts.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.classList.add('col-md-4', 'mb-4');
+                productItem.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">Giá: ${product.price.toLocaleString()} VND</p>
+                            <button class="btn btn-success add-to-cart" data-name="${product.name}" data-price="${product.price}">Thêm vào giỏ</button>
+                        </div>
+                    </div>
+                `;
+                productList.appendChild(productItem);
+            });
 
-    const filteredProducts = products.filter(product => {
-        const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
-        const nameMatch = product.name.toLowerCase().includes(searchTerm);
-        return categoryMatch && nameMatch;
-    });
+            // Gán sự kiện cho nút "Thêm vào giỏ" mới tạo
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', () => {
+                    const productName = button.getAttribute('data-name');
+                    const productPrice = parseInt(button.getAttribute('data-price'));
 
-    displayProducts(filteredProducts); // Hiển thị danh sách sản phẩm đã lọc
-}
+                    const product = cart.find(item => item.name === productName);
+                    if (product) {
+                        product.quantity++;
+                    } else {
+                        cart.push({ name: productName, price: productPrice, quantity: 1 });
+                    }
 
-// Thêm sự kiện cho select và input
-categorySelect.addEventListener('change', filterProducts);
-searchBar.addEventListener('input', filterProducts);
-
-// Hiển thị tất cả sản phẩm khi bắt đầu
-displayProducts(products);
-
-
-
-document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', () => {
-        const productName = button.getAttribute('data-name');
-        const productPrice = parseInt(button.getAttribute('data-price'));
-
-        const product = cart.find(item => item.name === productName);
-        if (product) {
-            product.quantity++;
-        } else {
-            cart.push({ name: productName, price: productPrice, quantity: 1 });
+                    updateCart();
+                });
+            });
         }
 
-        updateCart();
-    });
-});
+        // Hàm lọc sản phẩm
+        function filterProducts() {
+            const selectedCategory = categorySelect.value;
+            const searchTerm = searchBar.value.toLowerCase();
 
-cartBtn.addEventListener('click', () => {
-    cartElement.classList.toggle('hidden');
-});
+            const filteredProducts = products.filter(product => {
+                const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
+                const nameMatch = product.name.toLowerCase().includes(searchTerm);
+                return categoryMatch && nameMatch;
+            });
 
-checkoutBtn.addEventListener('click', () => {
-    if (cart.length > 0) {
-        alert('Thanh toán thành công!');
-        cart = [];
-        updateCart();
-    } else {
-        alert('Giỏ hàng của bạn đang trống.');
-    }
-});
+            displayProducts(filteredProducts); // Hiển thị danh sách sản phẩm đã lọc
+        }
 
-function updateCart() {
-    cartItems.innerHTML = '';
-    let total = 0;
+        // Thêm sự kiện cho select và input
+        categorySelect.addEventListener('change', filterProducts);
+        searchBar.addEventListener('input', filterProducts);
 
-    cart.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = `${item.name} - ${item.quantity} x ${item.price} VND`;
-        cartItems.appendChild(li);
-        total += item.price * item.quantity;
-    });
+        // Hiển thị tất cả sản phẩm khi bắt đầu
+        displayProducts(products);
 
-    totalPriceElement.textContent = `Tổng: ${total.toLocaleString()} VND`;
-    cartCount.textContent = cart.length;
-}
+        cartBtn.addEventListener('click', () => {
+            cartElement.classList.toggle('hidden');
+        });
 
-// Modal Elements
-const deliveryModal = document.getElementById("delivery-modal");
-const citySelect = document.getElementById("city-select");
-const confirmDeliveryBtn = document.getElementById("confirm-delivery");
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length > 0) {
+                alert('Thanh toán thành công!');
+                cart = [];
+                updateCart();
+            } else {
+                alert('Giỏ hàng của bạn đang trống.');
+            }
+        });
 
-// Danh sách các tỉnh thành (giả lập database)
-const cities = [
-    "Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ",
-    "Bình Dương", "Đồng Nai", "Khánh Hòa", "Lâm Đồng", "Quảng Ninh"
-];
+        function updateCart() {
+            cartItems.innerHTML = '';
+            let total = 0;
 
-// Hiển thị danh sách các tỉnh thành trong modal
-window.onload = function() {
-    cities.forEach(city => {
-        const option = document.createElement("option");
-        option.value = city;
-        option.textContent = city;
-        citySelect.appendChild(option);
-    });
-    deliveryModal.style.display = "flex";  // Hiển thị modal khi tải trang
-};
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.classList.add('list-group-item');
+                li.textContent = `${item.name} - ${item.quantity} x ${item.price.toLocaleString()} VND`;
+                cartItems.appendChild(li);
+                total += item.price * item.quantity;
+            });
 
-// Xác nhận khu vực giao hàng
-confirmDeliveryBtn.addEventListener("click", () => {
-    const selectedCity = citySelect.value;
-    if (selectedCity) {
-        alert(`Khu vực giao hàng đã chọn: ${selectedCity}`);
-        deliveryModal.style.display = "none";  // Đóng modal sau khi xác nhận
-    } else {
-        alert("Vui lòng chọn khu vực giao hàng!");  // Hiển thị thông báo nếu chưa chọn
-    }
-});
+            totalPriceElement.textContent = `Tổng: ${total.toLocaleString()} VND`;
+            cartCount.textContent = cart.length;
+        }
+
+        // Modal Elements
+        const deliveryModal = document.getElementById("delivery-modal");
+        const citySelect = document.getElementById("city-select");
+        const confirmDeliveryBtn = document.getElementById("confirm-delivery");
+
+        // Danh sách các tỉnh thành (giả lập database)
+        const cities = [
+            "Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ",
+            "Bình Dương", "Đồng Nai", "Khánh Hòa", "Lâm Đồng", "Quảng Ninh"
+        ];
+
+        // Hiển thị danh sách các tỉnh thành trong modal
+        window.onload = function() {
+            cities.forEach(city => {
+                const option = document.createElement("option");
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+            deliveryModal.style.display = "flex";  // Hiển thị modal khi tải trang
+        };
+
+        // Xác nhận khu vực giao hàng
+        confirmDeliveryBtn.addEventListener("click", () => {
+            const selectedCity = citySelect.value;
+            if (selectedCity) {
+                alert(`Khu vực giao hàng đã chọn: ${selectedCity}`);
+                deliveryModal.style.display = "none";  // Đóng modal sau khi xác nhận
+            } else {
+                alert("Vui lòng chọn khu vực giao hàng!");  // Hiển thị thông báo nếu chưa chọn
+            }
+        });
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
