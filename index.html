@@ -171,12 +171,16 @@ main {
     
     <header>
         <div class="header-items">
-        <select id="category-select">
-            <option value="all">Tất cả sản phẩm</option>
-            <option value="fruits">Trái cây</option>
-            <option value="dairy">Sữa</option>
-            <!-- Add more categories as needed -->
-        </select>
+                <select id="category-select">
+                    <option value="all">Danh mục sản phẩm</option>
+                    <option value="fruits_vegetables">Rau củ, trái cây</option>
+                    <option value="dairy">Sữa</option>
+                    <option value="meat_eggs">Thịt, trứng</option>
+                    <option value="snacks">Bánh kẹo</option>
+                    <option value="beverages">Thức uống</option>
+                    <option value="spices_rice_dry_foods">Gia vị, gạo, thực phẩm khô</option>
+                    <option value="home_living">Nhà cửa và đời sống</option>
+                </select>
 
         <input type="text" id="search-bar" placeholder="Tìm kiếm sản phẩm...">
 
@@ -214,13 +218,64 @@ main {
         </div>
     </main>
 
-    <script>let cart = [];
-const cartBtn = document.getElementById("cart-btn");
-const cartCount = document.getElementById("cart-count");
-const cartItems = document.getElementById("cart-items");
-const totalPriceElement = document.getElementById("total-price");
-const cartElement = document.getElementById("cart");
-const checkoutBtn = document.getElementById("checkout-btn");
+    <script>
+        let cart = [];
+        const cartBtn = document.getElementById("cart-btn");
+        const cartCount = document.getElementById("cart-count");
+        const cartItems = document.getElementById("cart-items");
+        const totalPriceElement = document.getElementById("total-price");
+        const cartElement = document.getElementById("cart");
+        const checkoutBtn = document.getElementById("checkout-btn");
+
+
+        const products = [
+            { name: "Bưởi", category: "fruits_vegetables" },
+            { name: "Sữa đặc", category: "dairy" },
+            { name: "Thịt gà", category: "meat_eggs" },
+            { name: "Bánh quy", category: "snacks" },
+            { name: "Nước ngọt", category: "beverages" },
+            { name: "Muối", category: "spices_rice_dry_foods" },
+            { name: "Gạo trắng", category: "spices_rice_dry_foods" },
+            { name: "Nến thơm", category: "home_living" }
+            // Thêm các sản phẩm khác nếu cần
+        ];
+
+        const categorySelect = document.getElementById('category-select');
+        const searchBar = document.getElementById('search-bar');
+        const productList = document.getElementById('product-list');
+
+// Hàm hiển thị sản phẩm
+function displayProducts(filteredProducts) {
+    productList.innerHTML = ''; // Xóa danh sách sản phẩm hiện tại
+    filteredProducts.forEach(product => {
+        const productItem = document.createElement('div');
+        productItem.textContent = product.name;
+        productList.appendChild(productItem);
+    });
+}
+
+// Hàm lọc sản phẩm
+function filterProducts() {
+    const selectedCategory = categorySelect.value;
+    const searchTerm = searchBar.value.toLowerCase();
+
+    const filteredProducts = products.filter(product => {
+        const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
+        const nameMatch = product.name.toLowerCase().includes(searchTerm);
+        return categoryMatch && nameMatch;
+    });
+
+    displayProducts(filteredProducts); // Hiển thị danh sách sản phẩm đã lọc
+}
+
+// Thêm sự kiện cho select và input
+categorySelect.addEventListener('change', filterProducts);
+searchBar.addEventListener('input', filterProducts);
+
+// Hiển thị tất cả sản phẩm khi bắt đầu
+displayProducts(products);
+
+
 
 document.querySelectorAll('.add-to-cart').forEach(button => {
     button.addEventListener('click', () => {
