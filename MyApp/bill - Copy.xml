@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bills>
+    <bill>
+        <ID>1</ID>
+        <tenHang>Giay bitis</tenHang>
+        <soLuong>6</soLuong>
+        <giaBan>18.0</giaBan>
+    </bill>
+    <bill>
+        <ID>5</ID>
+        <tenHang>Dep le</tenHang>
+        <soLuong>4</soLuong>
+        <giaBan>33.0</giaBan>
+    </bill>
+    <bill>
+        <ID>2</ID>
+        <tenHang>Banh mi</tenHang>
+        <soLuong>2</soLuong>
+        <giaBan>145.0</giaBan>
+    </bill>
+</bills>
